@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShipFlow — Shipping Management</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">S</div><div><b>ShipFlow</b><small>Shipping Management</small></div></div>
+    <div class="role-switch">
+      <label for="roleSelect">Mode aplikasi</label>
+      <select id="roleSelect"><option value="admin">Admin Shipping</option><option value="customer">Customer</option></select>
+    </div>
+    <nav id="nav">
+      <button class="nav-item active" data-page="dashboard"><span>▦</span> Dashboard</button>
+      <button class="nav-item" data-page="shipments"><span>▣</span> Data Pengiriman</button>
+      <button class="nav-item" data-page="tracking"><span>⌖</span> Tracking Paket</button>
+      <button class="nav-item admin-only" data-page="reports"><span>▤</span> Laporan</button>
+    </nav>
+    <div class="sidebar-foot"><div class="avatar">SF</div><div><b id="profileName">Admin ShipFlow</b><small id="profileRole">Administrator</small></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><div class="eyebrow">SHIPPING WORKSPACE</div><h1 id="pageTitle">Dashboard</h1></div><div class="top-actions"><span class="today" id="today"></span><button class="btn btn-primary admin-only" id="addShipmentTop">＋ Buat pengiriman</button></div></header>
+    <section id="page-dashboard" class="page active">
+      <div class="welcome"><div><p class="eyebrow light">PUSAT PENGIRIMAN</p><h2>Pengiriman lebih teratur,<br>pelanggan lebih tenang.</h2><p>Kelola status paket dan pantau perjalanan dalam satu tempat.</p></div><div class="welcome-art">📦<span>↗</span></div></div>
+      <div class="stats">
+        <article class="stat-card"><div class="stat-icon blue">▣</div><div><span>Total pengiriman</span><strong id="statTotal">0</strong><small>Semua paket tersimpan</small></div></article>
+        <article class="stat-card"><div class="stat-icon amber">◷</div><div><span>Menunggu pickup</span><strong id="statPending">0</strong><small>Perlu diproses admin</small></div></article>
+        <article class="stat-card"><div class="stat-icon purple">➜</div><div><span>Dalam pengiriman</span><strong id="statTransit">0</strong><small>Paket sedang berjalan</small></div></article>
+        <article class="stat-card"><div class="stat-icon green">✓</div><div><span>Terkirim</span><strong id="statDelivered">0</strong><small>Sudah sampai tujuan</small></div></article>
+      </div>
+      <div class="content-grid"><section class="panel large-panel"><div class="panel-head"><div><h3>Pengiriman terbaru</h3><p>Pantau perubahan status paket</p></div><button class="text-btn" data-goto="shipments">Lihat semua →</button></div><div class="table-wrap"><table><thead><tr><th>ID / RESI</th><th>PENERIMA</th><th>KURIR</th><th>STATUS</th><th></th></tr></thead><tbody id="recentRows"></tbody></table></div></section>
+      <section class="panel"><div class="panel-head"><div><h3>Akses cepat</h3><p>Pilih tindakan</p></div></div><button class="quick-action admin-only" id="quickAdd"><span class="quick-icon">＋</span><span><b>Buat pengiriman baru</b><small>Masukkan data penerima dan kurir</small></span><span>›</span></button><button class="quick-action" data-goto="tracking"><span class="quick-icon">⌕</span><span><b>Lacak paket</b><small>Cari berdasarkan ID atau resi</small></span><span>›</span></button><div class="tip-box"><b>💡 Tips</b><p>Perbarui status secara berkala agar pelanggan mendapat informasi pengiriman yang akurat.</p></div></section></div>
+    </section>
+    <section id="page-shipments" class="page">
+      <div class="panel"><div class="panel-head wrap-head"><div><h3>Data pengiriman</h3><p>Daftar pengiriman dan status operasional</p></div><button class="btn btn-primary admin-only" id="addShipment">＋ Buat pengiriman</button></div>
+      <div class="toolbar"><input id="shipmentSearch" placeholder="Cari ID, nama penerima, atau resi…"><select id="statusFilter"><option value="">Semua status</option><option>Menunggu pickup</option><option>Diproses</option><option>Dalam pengiriman</option><option>Terkirim</option><option>Gagal</option></select></div>
+      <div class="table-wrap"><table><thead><tr><th>ID / RESI</th><th>PENERIMA & ALAMAT</th><th>KURIR</th><th>TANGGAL</th><th>STATUS</th><th>AKSI</th></tr></thead><tbody id="shipmentRows"></tbody></table></div><div class="table-note" id="shipmentCount"></div></div>
+    </section>
+    <section id="page-tracking" class="page">
+      <div class="tracking-hero"><div><p class="eyebrow light">TRACK & TRACE</p><h2>Lacak perjalanan paket</h2><p>Masukkan nomor pengiriman atau nomor resi untuk melihat status terbaru.</p></div><div class="track-symbol">⌖</div></div>
+      <div class="track-search panel"><input id="trackingInput" placeholder="Contoh: SF-1001 atau JNE123456"><button class="btn btn-primary" id="trackButton">Lacak paket</button></div>
+      <div id="trackingResult" class="tracking-result"></div>
+    </section>
+    <section id="page-reports" class="page">
+      <div class="stats"><article class="stat-card"><div class="stat-icon blue">▣</div><div><span>Total paket</span><strong id="reportTotal">0</strong></div></article><article class="stat-card"><div class="stat-icon green">✓</div><div><span>Tingkat terkirim</span><strong id="reportRate">0%</strong></div></article><article class="stat-card"><div class="stat-icon amber">!</div><div><span>Paket gagal</span><strong id="reportFailed">0</strong></div></article></div>
+      <div class="panel"><div class="panel-head"><div><h3>Ringkasan status</h3><p>Distribusi seluruh data pengiriman</p></div><button class="btn btn-secondary" id="exportCsv">⇩ Ekspor CSV</button></div><div id="reportBars" class="report-bars"></div></div>
+    </section>
+  </main>
+</div>
+<div class="modal-backdrop" id="shipmentModal" aria-hidden="true"><div class="modal"><div class="modal-head"><div><h2 id="modalTitle">Buat pengiriman</h2><p>Lengkapi informasi penerima dan paket.</p></div><button class="icon-btn" id="closeModal" aria-label="Tutup">×</button></div>
+<form id="shipmentForm"><input type="hidden" id="editId"><div class="form-grid">
+<label>Nama penerima *<input id="recipient" required placeholder="Nama lengkap"></label>
+<label>Nomor telepon *<input id="phone" required placeholder="08xxxxxxxxxx"></label>
+<label class="full">Alamat lengkap *<textarea id="address" required rows="2" placeholder="Jalan, nomor rumah, kecamatan, kota"></textarea></label>
+<label>Kurir *<select id="courier" required><option value="JNE">JNE</option><option value="J&T Express">J&T Express</option><option value="SiCepat">SiCepat</option><option value="Pos Indonesia">Pos Indonesia</option><option value="AnterAja">AnterAja</option></select></label>
+<label>Layanan<select id="service"><option>Reguler</option><option>Express</option><option>Same Day</option><option>Ekonomi</option></select></label>
+<label>Berat paket (kg)<input id="weight" type="number" min="0.1" step="0.1" value="1" required></label>
+<label>Biaya kirim (Rp)<input id="shippingCost" type="number" min="0" step="1000" value="15000" required></label>
+<label>Status<select id="shipmentStatus"><option>Menunggu pickup</option><option>Diproses</option><option>Dalam pengiriman</option><option>Terkirim</option><option>Gagal</option></select></label>
+<label>Nomor resi<input id="trackingNumber" placeholder="Isi setelah resi tersedia"></label>
+<label class="full">Catatan<textarea id="notes" rows="2" placeholder="Instruksi pengiriman (opsional)"></textarea></label>
+</div><div class="form-error" id="formError"></div><div class="modal-actions"><button type="button" class="btn btn-secondary" id="cancelModal">Batal</button><button type="submit" class="btn btn-primary">Simpan pengiriman</button></div></form></div></div>
+<div class="toast" id="toast"></div>
+<script src="app.js"></script>
+</body></html>
